@@ -5,7 +5,7 @@ const fs = require("fs");
 const multer = require("multer");
 const { JSDOM } = require('jsdom');
 
-var mysql = require('mysql2');
+var mysql = require('mysql');
 
 const is_heroku = (process.env.IS_HEROKU || false);
 
@@ -142,7 +142,6 @@ app.post("/login", function(req, res) {
 });
 
 function authenticate(email, pwd, callback) {
-
     connection.connect();
     connection.query(
       "SELECT * FROM bby_2_user WHERE email = ? AND pass = ?", [email, pwd],
@@ -178,15 +177,11 @@ app.get("/homepage", function (req,res) {
 })
 
 app.get('/get-timeline', function (req, res) {
-
     connection.connect();
     connection.query('SELECT * FROM bby_2_score', function (error, results, fields) {
         if (error) {
-           
         }
-      
         res.send({ status: "success", rows: results });
-
     });
     connection.end();
 });
@@ -195,11 +190,8 @@ app.get('/get-users', function (req, res) {
     connection.connect();
     connection.query('SELECT * FROM bby_2_user', function (error, results, fields) {
         if (error) {
-           
         }
-      
         res.send({ status: "success", rows: results });
-
     });
     connection.end();
 });
@@ -239,7 +231,6 @@ app.post('/add-user', function (req, res) {
           [req.body.adminRights, req.body.email, req.body.pass, req.body.firstName, req.body.lastName],
           function (error, results, fields) {
       if (error) {
-        
         
       }
       res.send({ status: "success", msg: "Record added." });
@@ -417,5 +408,6 @@ app.post('/upload-timeline', uploadTimeline.array("files"), function (req, res) 
 let port = (process.env.PORT || 3000);
 app.listen(port, function () {
 });
+
 
 
